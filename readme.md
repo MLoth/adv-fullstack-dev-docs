@@ -41,7 +41,7 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
   1. Installeer de router.
 
   ```bash
-  npm i vue-router
+  npm i vue-router@4
   ```
 
   2. Maak een file aan om alle routes en de setup bij te houden:
