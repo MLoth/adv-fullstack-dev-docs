@@ -9,15 +9,16 @@ In deze repo kan je alle development files en documentatie vinden voor tijdens d
 - [ ] Installeer een project: `npm init vite@latest app-name -- --template vue-ts`.
 - [ ] `.nvmrc`-file is aangemaakt.
 - [ ] `.prettierrc` of `.editorconfig` is aanwezig voor een consistente codebase voor verschillende developers. Kies zelf wat je het handigste vindt.
-- [ ] Plugins nodig? Installeer ze dan.
+      Onder `code/.prettierrc` vind je een voorbeeld-file met een config die ik handing vind.
+- [ ] Plugins nodig? Installeer ze dan (zie plugins).
 
 ### Node.js
 
-Gebruik als je kan steeds **nvm**. Maak dan ook een `.nvmrc`-file aan in de root van je project zodat het command **`nvm use`** de node-versie kan vinden.
+Gebruik als je kan steeds **nvm**. Maak dan ook een `.nvmrc`-file aan in de root van je project zodat het command `nvm use` de node-versie kan vinden.
 
 ### Create a vue-app
 
-We gebruiken vite om het project te maken en om een dev-server op te zetten.
+We gebruiken [vite](https://vitejs.dev) om het project te maken en om een dev-server op te zetten.
 
 ```bash
 npm init vite@latest app-name -- --template vue-ts
@@ -105,7 +106,7 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
   app.mount('#app');
   ```
 
-- **TailwindCSS**: The best CSS-framework.
+- **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
 
   1. Installeer de vereiste packages.
 
