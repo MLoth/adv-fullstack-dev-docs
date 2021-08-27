@@ -1,13 +1,14 @@
 # Adv. fullstack dev. docs
 
 In deze repo kan je alle development files en documentatie vinden voor tijdens de labo's.
+Als je fouten vindt of zaken die handiger kunnen, maak dan een pull-request met de correctie of aanvulling.
 
 ## Project setup
 
 ### TLDR; Checklist bij een nieuw project
 
 - [ ] Installeer een project: `npm init vite@latest app-name -- --template vue-ts`.
-- [ ] `.nvmrc`-file is aangemaakt.
+- [ ] `.nvmrc`-file is aangemaakt. (Handig truckje: je kan makkelijk 'iets' wegschrijven via `>>`, dus in dit geval bv.: `node -v >> .nvmrc`)
 - [ ] `.prettierrc` of `.editorconfig` is aanwezig voor een consistente codebase voor verschillende developers. Kies zelf wat je het handigste vindt.
       Onder `code/.prettierrc` vind je een voorbeeld-file met een config die ik handing vind.
 - [ ] Plugins nodig? Installeer ze dan (zie plugins).
