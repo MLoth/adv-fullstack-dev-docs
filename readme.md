@@ -174,20 +174,32 @@ Je zou deze aanmaak kunnen automatiseren met een tool als [yeoman](https://yeoma
       Dit kan via `npm init -y`. Dit maakt een leeg `package.json`-file aan die je dan zelf kan aanvullen.
       Uiteindelijk krijgen we een file met een gelijkaardige structuur:
 - [ ] Nu beginnen we aan het echte werk: de npm-packages toevoegen die onze app runnen en onze dev-setup vereenvoudigen:
-  - [ ] We gebruiken **typescript** in ons project, inwstalleer `npm i -D typescript` & `npm i -D tslint`.
+  - [ ] We gebruiken **typescript** in ons project, installeer `npm i -D typescript` & `npm i -D eslint`.
         De flag `-D` zet het onder `devDependencies` zodat het niet in de build meegenomen wordt.
-  - [ ] We also init the typescript config: `npx tsc --init`. We change the config-file to use the dist folder as output: `"outDir": "dist"`.
-  - [ ] We also install a dependency to have a smooth dev-server: `npm i -D ts-node`.
-  - [ ] We are making this backend using the Express framework: `npm i -S express`.
-  - [ ] We will also install the typescript interfaces for Express: `npm i -D @types/express`.
+        Gebruikte je vroeger `tslint` dan moet je switchen naar `eslint` gezien `tslint` deprecated is.
+  - [ ] Initialiseer de Typescript config: `npx tsc --init`. We passen de configfile aan, om onze `dist` directory als output te gebruiken: `"outDir": "dist"`.
+  - [ ] Volgende dependency verzorgt een vlotte development server: `npm i -D ts-node`.
+  - [ ] De backend wordt gemaakt met Express: `npm i -S express`.
+  - [ ] We installeren nog Typescript interfaces voor Express: `npm i -D @types/express`.
 - [ ] Met bovenstaande packages kunnen we de scripts aanvullen in `package.json`:
 
-      "start": "tsc && node dist/app.js",
+      "start": "npx tsc && node dist/app.js",
       "dev": "npx nodemon --watch 'server/**/*' --exec 'ts-node' server/app.ts",
 
-  Let op, bovenstaande scripts gaan er van uit dat in de backend de file `app.ts` in een map server staat (dit gaan we meestal doen).
+  Let op, bovenstaande scripts gaan er van uit dat in de backend de file `app.ts` in een map `server` staat (dit gaan we meestal doen).
 
 - [ ] Maak een folder server aan met een `app.ts` file.
+- [ ] Op sommige PC's zal bovenstaande config niet vlot werken. Probeer met `"dev": "npx nodemon --watch server/**/* --exec ts-node server/app.ts",`. Test uit of je app automatisch reload, en niet crasht.
+- [ ] Indien het nog niet lukt, probeer dan om een `nodemon.json` config-file aan te maken om de auto-reload te voorzien. Plaats er onderstaande info:
+  ```json
+  {
+    "watch": ["server"],
+    "ext": "ts,json",
+    "exec": "ts-node ./server/app.ts"
+  }
+  ```
+  Pas nu wel `package.json` aan naar: `"dev": "nodemon",`
+  
 - [ ] `.nvmrc`-file is aangemaakt.
 - [ ] `.prettierrc` of `.editorconfig` is aanwezig voor een consistente codebase voor verschillende developers. Kies zelf wat je het handigste vindt.
       Onder `code/.prettierrc` vind je een voorbeeld-file met een config die ik handig vind.
