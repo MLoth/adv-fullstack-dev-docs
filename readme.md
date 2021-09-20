@@ -88,8 +88,8 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
 
   1. Installeer de package.
 
-  ```typescript
-  npm i vuex --save
+  ```
+  npm install vuex@next --save
   ```
 
   2. Voeg ook deze plugin toe aan de `main.ts` file:
