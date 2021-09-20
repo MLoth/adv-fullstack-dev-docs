@@ -6,47 +6,49 @@ Please create a pull-request for corrections, remarks or enhancements.
 
 # Node.js
 
-Gebruik als je kan steeds **nvm**. Maak dan ook een `.nvmrc`-file aan in de root van je project zodat het command `nvm use` de node-versie kan vinden. Zowel de front- als de backend maken we in node.js, dus het is een goed idee om die versies te 'managen'.
+Always use **nvm** when you can. Make sure to include a `.nvmrc`-file in tha case. Put it in the root of your project so that the `nvm use` command can find the right Node-version.
+Both the frontend and backend will be written with NodeJS, so the best practice is to 'manage' their Node version.
 
 # Frontend
 
-## TLDR; Checklist bij een nieuw project
+## TLDR; Checklist for a new project
 
-- [ ] Installeer een project: `npm init vite@latest app-name -- --template vue-ts`.
-- [ ] `.nvmrc`-file is aangemaakt. (Handig truckje: je kan makkelijk 'iets' wegschrijven via `>>`, dus in dit geval bv.: `node -v >> .nvmrc`)
-- [ ] `.prettierrc` of `.editorconfig` is aanwezig voor een consistente codebase voor verschillende developers. Kies zelf wat je het handigste vindt.
-      Onder `code/.prettierrc` vind je een voorbeeld-file met een config die ik handig vind.
-- [ ] Plugins nodig? Installeer ze dan (zie plugins).
+- [ ] Create a new project `npm init vite@latest app-name -- --template vue-ts`.
+- [ ] Add a `.nvmrc`-file containing the Node version. Trick: `node -v >> .nvmrc` will writ the Node version to that file. It works cross-platform!
+- [ ] `.prettierrc` or `.editorconfig` is available. This makes sure we have a consistent codebase for different developers. Choose something that you prefer yourself. You can find an example of a file in `code/.prettierrc` for something your teachers will use.
+
+- [ ] Need more plugins? Just install them!
 
 ## Create a vue-app
 
-We gebruiken [vite](https://vitejs.dev) om het project te maken en om een dev-server op te zetten.
+We use [vite](https://vitejs.dev) to create the project and setup a development environment.
 
 ```bash
 npm init vite@latest app-name -- --template vue-ts
 ```
 
-Als het project aangemaakt is, installeren we de dependecies en runnen we de dev-server.
+As soon as the project is made we install the dependencies and run the development server.
 
 ```bash
-cd app-name   # Dus de naam van je project
-npm i         # Of npm i
-npm run dev   # Of andere commands in package.json
+cd app-name   # The name of your project
+npm i         # Or npm install
+npm run dev   # Or any other command inside package.json
 ```
 
 ## Vue plugins
 
-De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voorname plugins opgelijst. Voor de meer specifieke settings verwijs ik naar de labo's, dit kan handig zijn voor als je een project aanmaakt.
+The Vue-ecosystem consist mostly out of plugins. We have written the most important ones in here. For more specific settings, we refer to the lab assignments. But these general settings can be a great kickstarter for any new project.
 
-- **Router**: Naar verschillende pagina's gaan in JS.
 
-  1. Installeer de router.
+- **Router**: Go to different pages inside JS
+
+  1. Install the router.
 
   ```bash
   npm i vue-router@4
   ```
 
-  2. Maak een file aan om alle routes en de setup bij te houden:
+  2. Create a file to setup the router and keep track of different routes
 
   ```typescript
   // router.ts
@@ -68,7 +70,7 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
   export default router;
   ```
 
-  3. 'Koppel' de router aan je vue-app.
+  3. 'Link' the router to your Vue app.
 
   ```typescript
   // main.ts
@@ -84,15 +86,14 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
   app.mount('#app');
   ```
 
-- **Vuex**: Lokaal zaken bijhouden en opvragen in JS.
+- **Vuex**: Keep track of data locally and refer to it in JS
 
-  1. Installeer de package.
+  1. Install the package.
 
   ```typescript
   npm i vuex --save
   ```
-
-  2. Voeg ook deze plugin toe aan de `main.ts` file:
+  2. Link the plugin inside your `main.ts` file:
 
   ```typescript
   // main.ts
@@ -110,19 +111,19 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
 
 - **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
 
-  1. Installeer de vereiste packages.
+  1. Install the necessary packages and dependencies for TailwindCSS.
 
   ```bash
   npm i -D tailwindcss@latest postcss@latest autoprefixer@latest
   ```
 
-  2. Genereer de nodige configuration files.
+  2. Generate the necessary configuration files.
 
   ```bash
   npx tailwindcss init -p
   ```
 
-  3. Zorg dat je enkel de classes die gerbuikt worden in je build CSS-bundle houdt:
+  3. Make sure to only use the Classes that you really use in your built CSS-bundle.
 
   ```javascript
   // tailwind.config.js
@@ -140,7 +141,7 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
   };
   ```
 
-  4. Maak een CSS-file waarin je de Tailwind directives oproept en die je import in je `main.ts`.
+  4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
 
   ```css
   <!-- assets/screen.css -->
@@ -165,33 +166,43 @@ De bouwstenen van het vue-ecosystem zijn de plugins. Hier staan de meest voornam
 
 ## TLDR; Checklist bij een nieuw project
 
-Ja, hier moeten we meer zelf doen dan bij een frontend-project. We vertrekken met niets en gaan gaandeweg kleine onderdelen toevoegen om alles krachtiger te maken.
-Je zou deze aanmaak kunnen automatiseren met een tool als [yeoman](https://yeoman.github.io/generator/).
+I'm sorry to tell you, but we'll have to do a little bit more custom setup for a backend project, than for the Vue frontend project.
 
-- [ ] Maak een folder aan waar je het express project wil aanmaken. Werk met git.
-- [ ] We maken een package-file aan:
-      Doe het via `npm init`, je kan stap per stap de gegevens kiezen.
-      Dit kan via `npm init -y`. Dit maakt een leeg `package.json`-file aan die je dan zelf kan aanvullen.
-      Uiteindelijk krijgen we een file met een gelijkaardige structuur:
-- [ ] Nu beginnen we aan het echte werk: de npm-packages toevoegen die onze app runnen en onze dev-setup vereenvoudigen:
-  - [ ] We gebruiken **typescript** in ons project, inwstalleer `npm i -D typescript` & `npm i -D tslint`.
-        De flag `-D` zet het onder `devDependencies` zodat het niet in de build meegenomen wordt.
-  - [ ] We also init the typescript config: `npx tsc --init`. We change the config-file to use the dist folder as output: `"outDir": "dist"`.
-  - [ ] We also install a dependency to have a smooth dev-server: `npm i -D ts-node`.
-  - [ ] We are making this backend using the Express framework: `npm i -S express`.
-  - [ ] We will also install the typescript interfaces for Express: `npm i -D @types/express`.
-- [ ] Met bovenstaande packages kunnen we de scripts aanvullen in `package.json`:
+We start from scratch building up the project with smaller parts, to make everything into a powerfull app. You could automate the setup process with a tool like [yeoman](https://yeoman.github.io/generator/).
 
-      "start": "tsc && node dist/app.js",
-      "dev": "npx nodemon --watch 'server/**/*' --exec 'ts-node' server/app.ts",
+- [ ] Create a folder where you want to setup the `Express` project. Use Git to version control it.
+- [ ] Create a `package.json` file with `npm init`. Fill in the necessary details. You could also skip the Wizard (`npm init -y`), and create the file yourself. 
 
-  Let op, bovenstaande scripts gaan er van uit dat in de backend de file `app.ts` in een map server staat (dit gaan we meestal doen).
+Now we can start by adding some NPM-packages to our project. These will run our app and make sure we can develop in a smooth way.
+- [ ] As we use **typescript** in our project, we have to install it with `npm i -D typescript`. Also install `npm i -D eslint`.  
+    Note the `-D` flag. This will make sure the package is listed inside the `devDependencies` section of our `package.json` file. Any package in there will not be used inside the build process. We only need it during development.  
+    If you used to work with `tslint`, you should change to `eslint` as the former is now deprecated and no longer supported.
+- [ ] Install the Typescript config: `npx tsc --init`. We change the `"outDir": "dist"` to make sure we are using the `dist` directory as the output.
+- [ ] To ensure a smooth development server, intall `npm i -D ts-node`.
+- [ ] The backend uses Express: `npm i -S express`.
+- [ ] For Typescript, we will install custom Express interfaces: `npm i -D @types/express`.
+- [ ] Now that we have everything installed, we can configure our `package.json` with some scripts:
+  ```json
+  "start": "npx tsc && node dist/app.js",
+  "dev": "npx nodemon --watch 'server/**/*' --exec 'ts-node' server/app.ts",
+  ```
 
-- [ ] Maak een folder server aan met een `app.ts` file.
-- [ ] `.nvmrc`-file is aangemaakt.
-- [ ] `.prettierrc` of `.editorconfig` is aanwezig voor een consistente codebase voor verschillende developers. Kies zelf wat je het handigste vindt.
-      Onder `code/.prettierrc` vind je een voorbeeld-file met een config die ik handig vind.
-- [ ] Nu kan je beginnen met coden. Een basis express-app ziet er als volgt uit:
+  Note that these scripts require the backend file `app.ts` resides in the `server` directory. (This is a best-practice).
+- [ ] Create a folder `server` with the `app.ts` file.
+- [ ] On some machines, it might occur that the previous config doesn't work smoothly. Try to change it to `"dev": "npx nodemon --watch server/**/* --exec ts-node server/app.ts",`. Now try and edit the `app.ts` file, and see if it automatically reloads your app without crashing.
+- [ ] If you couldn't get it working, try and add a `nodemon.json` file containing this content.
+  ```json
+  {
+    "watch": ["server"],
+    "ext": "ts,json",
+    "exec": "ts-node ./server/app.ts"
+  }
+  ```
+- [ ] Now, do make sure you update the line in `package.json` to:  `"dev": "nodemon",`
+  
+- [ ] Add a `.nvmrc`-file containing the Node version. Trick: `node -v >> .nvmrc` will writ the Node version to that file. It works cross-platform!
+- [ ] `.prettierrc` or `.editorconfig` is available. This makes sure we have a consistent codebase for different developers. Choose something that you prefer yourself. You can find an example of a file in `code/.prettierrc` for something your teachers will use.
+- [ ] Now start coding. A basic Express NodeJS app looks like this:
 
   ```typescript
   // app.ts
@@ -218,7 +229,7 @@ Je zou deze aanmaak kunnen automatiseren met een tool als [yeoman](https://yeoma
 
 ### Database
 
-Met welke server ga je verbinden? Werk je op [Atlas van Mongo](https://www.mongodb.com/cloud/atlas) of lokaal in Docker?
+What server are you going to connect with? Is it [Atlas by Mongo](https://www.mongodb.com/cloud/atlas), or perhaps a local DB in Docker? Or outside of your network?
 
 ### GraphQL
 
@@ -432,3 +443,23 @@ To work with graphQL, we'll need a couple of packages:
 ## gRPC setup
 
 Todo
+
+## Docker setup
+
+We want to use Docker inside our NodeJS project, so that we can easily deploy our server to other environments without having to go through the process of installing Node and managing the versions.
+
+It's also a good idea to continue to Kubernetes, which will manage our Docker container deployments in a production environment. Ideal for scalability!
+
+Using Visual Studio Code, you can easily configure Docker to your project.
+
+- Press `Ctrl+Shift+P` (or `CMD+Shift+P` on MacOS) to access the `Command Pallette`. Search for `Docker: Add Docker Files to Workspace...` and press that.
+  ![Docker setup](images/Docker-setup.png)
+- Follow the instructions for `Node.JS`. Usually, you can keep everything on default.
+- Also choose to `Include optional Docker Compose files?`. This will give us an easy way to run our Docker container.
+- If everything goes well, you should have these 4 new files. You should still remember what these files do, from lessons of Backend development.
+  - `.dockerignore`
+  - `docker-compose.debug.yml`
+  - `docker-compose.yml`
+  - `Dockerfile`
+
+- If necessary, change the Docker image name inside `docker-compose.yml` to something else, so you can push it to your own Docker Hub (or GitHub Packages).
