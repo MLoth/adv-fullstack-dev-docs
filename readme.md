@@ -221,8 +221,9 @@ Now we can start by adding some NPM-packages to our project. These will run our 
   });
 
   // APP START
-  app.listen(port);
-  console.info(`\nServer 👾 \nListening on http://localhost:${port}/`);
+  app.listen(port, () => {
+    console.info(`\nServer 👾 \nListening on http://localhost:${port}/`);
+  });
   ```
 
 ## GraphQL setup
