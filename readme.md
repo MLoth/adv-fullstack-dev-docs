@@ -110,79 +110,159 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
   npm install vuex@next --save
   ```
 
-  2. Link the plugin inside your `main.ts` file:
-
-  ```typescript
-  // main.ts
-  import { createApp } from 'vue'
-
-  import App from './App.vue'
-  import Vuex from 'vuex'
-
-  const app = createApp(App)
-
-  app.use(Vuex)
-
-  app.mount('#app')
-  ```
-
-- **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
-
-  1. Install the necessary packages and dependencies for TailwindCSS.
-
-  ```bash
-  npm i -D tailwindcss@latest postcss@latest autoprefixer@latest
-  ```
-
-  2. Generate the necessary configuration files.
-
-  ```bash
-  npx tailwindcss init -p
-  ```
-
-  3. Make sure to only use the Classes that you really use in your built CSS-bundle.
-
-  ```javascript
-  // tailwind.config.js
-  module.exports = {
-    // mode: 'jit',
-
-    purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-
-    darkMode: 'media', // or 'class'
-
-    theme: {
-      extend: {},
-    },
-
-    variants: {
-      extend: {},
-    },
-
-    plugins: [],
-  }
-  ```
-
-  4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
-
-  ```css
-  <!-- assets/screen.css -->
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  ```
+  2. Link the plugin-file inside your `main.ts` file:
 
   ```typescript
   // main.ts
   import { createApp, App as AppInterface } from 'vue'
 
   import App from './App.vue'
-  import 'assets/screen.css' // Import the css-file.
+  import store from './store/' // Use of index.ts file in dir.
 
   const app: AppInterface = createApp(App)
 
+  app.use(store)
+
   app.mount('#app')
   ```
+
+  3. Create the store (index.ts), here with one module (moduleA):
+
+  ```typescript
+  import { createStore } from 'vuex'
+
+  import moduleA from './modules/moduleA'
+
+  const store = createStore({
+    modules: {
+      moduleA,
+    },
+  })
+
+  export default store
+  ```
+
+  4. The real work, a Vuex module:
+
+  ```typescript
+  import { Commit } from 'vuex'
+  import Entity from '../../models/Entity'
+
+  type State = {
+    someStateToKeep: { [Key in string]: Entity }
+    someMoreStateToKeep: any[]
+  }
+
+  export enum MutationTypes {
+    UPDATE_ENTITY = 'updateEntity',
+    SET_API_DATA = 'setApiData',
+  }
+
+  export enum GetterTypes {
+    GET_SOME_ENTITIES = 'getSomeEntities',
+  }
+
+  export enum ActionTypes {
+    VERY_SLOW_ASYNC_CALL = 'verySlowAsyncCall',
+  }
+
+  const state: State = {
+    someStateToKeep: {},
+    someMoreStateToKeep: [],
+  }
+
+  export default {
+    state: state,
+
+    getters: {
+      // Check if name exists in the state.
+      [GetterTypes.GET_SOME_ENTITIES]: (state: State) => (entityName: string) =>
+        state.someStateToKeep[entityName] ? true : false,
+    },
+
+    mutations: {
+      [MutationTypes.UPDATE_ENTITY](state: State, e: Entity) {
+        const position: number = state.someMoreStateToKeep.findIndex(
+          (value: Entity) => value.id === e.id,
+        )
+
+        if (position >= 0) {
+          state.someMoreStateToKeep[position] = e
+        }
+      },
+    },
+
+    actions: {
+      async [ActionTypes.VERY_SLOW_ASYNC_CALL]({ commit }: { commit: Commit }) {
+        // Can take some time
+        const data = await fetch('https://data.org/slow-api').then((r) =>
+          r.json(),
+        )
+
+        // This can be done instant, the data is here.
+        commit(MutationTypes.SET_API_DATA, data)
+      },
+    },
+  }
+  ```
+
+- **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
+
+1. Install the necessary packages and dependencies for TailwindCSS.
+
+```bash
+npm i -D tailwindcss@latest postcss@latest autoprefixer@latest
+```
+
+2. Generate the necessary configuration files.
+
+```bash
+npx tailwindcss init -p
+```
+
+3. Make sure to only use the Classes that you really use in your built CSS-bundle.
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  // mode: 'jit',
+
+  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+
+  darkMode: 'media', // or 'class'
+
+  theme: {
+    extend: {},
+  },
+
+  variants: {
+    extend: {},
+  },
+
+  plugins: [],
+}
+```
+
+4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
+
+```css
+<!-- assets/screen.css - (PostCSS) -->
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+```typescript
+// main.ts
+import { createApp, App as AppInterface } from 'vue'
+
+import App from './App.vue'
+import 'assets/screen.css' // Import the css-file.
+
+const app: AppInterface = createApp(App)
+
+app.mount('#app')
+```
 
 # Backend
 
