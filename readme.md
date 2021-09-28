@@ -487,10 +487,11 @@ To work with graphQL, we'll need a couple of packages:
       )
 
       // APP START -> also covered in basic Express part
-      app.listen(port)
-      console.info(
-        `\nWelcome 👋\nGraphQL server @ http://localhost:${port}/v1\n`,
-      )
+      app.listen(port, () => {
+        console.info(
+          `\nWelcome 👋\nGraphQL server @ http://localhost:${port}/v1\n`,
+        )
+      })
     }
 
     createSchema()
