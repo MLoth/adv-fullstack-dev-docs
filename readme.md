@@ -208,61 +208,61 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
 
 - **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
 
-1. Install the necessary packages and dependencies for TailwindCSS.
+  1. Install the necessary packages and dependencies for TailwindCSS.
 
-```bash
-npm i -D tailwindcss@latest postcss@latest autoprefixer@latest
-```
+  ```bash
+  npm i -D tailwindcss@latest postcss@latest autoprefixer@latest
+  ```
 
-2. Generate the necessary configuration files.
+  2. Generate the necessary configuration files.
 
-```bash
-npx tailwindcss init -p
-```
+  ```bash
+  npx tailwindcss init -p
+  ```
 
-3. Make sure to only use the Classes that you really use in your built CSS-bundle.
+  3. Make sure to only use the Classes that you really use in your built CSS-bundle.
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  // mode: 'jit',
+  ```javascript
+  // tailwind.config.js
+  module.exports = {
+    // mode: 'jit',
 
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+    purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 
-  darkMode: 'media', // or 'class'
+    darkMode: 'media', // or 'class'
 
-  theme: {
-    extend: {},
-  },
+    theme: {
+      extend: {},
+    },
 
-  variants: {
-    extend: {},
-  },
+    variants: {
+      extend: {},
+    },
 
-  plugins: [],
-}
-```
+    plugins: [],
+  }
+  ```
 
-4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
+  4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
 
-```css
-<!-- assets/screen.css - (PostCSS) -->
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+  ```css
+  <!-- assets/screen.css - (PostCSS) -->
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  ```
 
-```typescript
-// main.ts
-import { createApp, App as AppInterface } from 'vue'
+  ```typescript
+  // main.ts
+  import { createApp, App as AppInterface } from 'vue'
 
-import App from './App.vue'
-import 'assets/screen.css' // Import the css-file.
+  import App from './App.vue'
+  import 'assets/screen.css' // Import the css-file.
 
-const app: AppInterface = createApp(App)
+  const app: AppInterface = createApp(App)
 
-app.mount('#app')
-```
+  app.mount('#app')
+  ```
 
 # Backend
 
