@@ -39,7 +39,6 @@ npm run dev   # Or any other command inside package.json
 
 The Vue-ecosystem consist mostly out of plugins. We have written the most important ones in here. For more specific settings, we refer to the lab assignments. But these general settings can be a great kickstarter for any new project.
 
-
 - **Router**: Go to different pages inside JS
 
   1. Install the router.
@@ -52,38 +51,55 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
 
   ```typescript
   // router.ts
-  import { createRouter, createWebHistory } from 'vue-router';
+  import { createRouter, createWebHistory } from 'vue-router'
 
-  import Home from '../components/Home.vue';
-  // ...
-
-  const routes = [
-    { path: '/', component: Home },
+  const routes: RouteRecordRaw[] = [
+    { path: '/', component: () => import('../components/Home.vue')) },
     // ...
-  ];
+  ]
 
-  const router = createRouter({
+  const router: Router = createRouter({
     history: createWebHistory(),
     routes,
-  });
+  })
 
-  export default router;
+  // Route guard
+  router.beforeEach(
+    (
+      route: RouteLocationNormalized,
+      from: RouteLocationNormalized,
+      next: NavigationGuardNext,
+    ) => {
+      // Check a property that you added to the route meta
+      if (route.meta.SOMETHING) {
+        // If user is allowed
+        if (userIsAllowed) {
+          next()
+        // Else redirect to error or path, etc.
+        } else {
+          router.push(from.path)
+        }
+      }
+    },
+  )
+
+  export default router
   ```
 
   3. 'Link' the router to your Vue app.
 
   ```typescript
   // main.ts
-  import { createApp } from 'vue';
+  import { createApp, App as AppInterface } from 'vue'
 
-  import App from './App.vue';
-  import router from './bootstrap/router'; // Here, router is inside a folder bootstrap
+  import App from './App.vue'
+  import router from './bootstrap/router' // Here, router is inside a folder bootstrap
 
-  const app = createApp(App);
+  const app: AppInterface = createApp(App)
 
-  app.use(router);
+  app.use(router)
 
-  app.mount('#app');
+  app.mount('#app')
   ```
 
 - **Vuex**: Keep track of data locally and refer to it in JS
@@ -93,20 +109,21 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
   ```
   npm install vuex@next --save
   ```
+
   2. Link the plugin inside your `main.ts` file:
 
   ```typescript
   // main.ts
-  import { createApp } from 'vue';
+  import { createApp } from 'vue'
 
-  import App from './App.vue';
-  import Vuex from 'vuex';
+  import App from './App.vue'
+  import Vuex from 'vuex'
 
-  const app = createApp(App);
+  const app = createApp(App)
 
-  app.use(Vuex);
+  app.use(Vuex)
 
-  app.mount('#app');
+  app.mount('#app')
   ```
 
 - **[TailwindCSS](https://tailwindcss.com)**: "The best CSS-framework."
@@ -128,17 +145,22 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
   ```javascript
   // tailwind.config.js
   module.exports = {
-    // mode: 'aot',
+    // mode: 'jit',
+
     purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-    darkMode: 'media', // or 'media' or 'class'
+
+    darkMode: 'media', // or 'class'
+
     theme: {
       extend: {},
     },
+
     variants: {
       extend: {},
     },
+
     plugins: [],
-  };
+  }
   ```
 
   4. Create CSS-file where you call the Tailwind directives and import them into `main.ts`.
@@ -152,14 +174,14 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
 
   ```typescript
   // main.ts
-  import { createApp } from 'vue';
+  import { createApp, App as AppInterface } from 'vue'
 
-  import App from './App.vue';
-  import 'assets/screen.css'; // Import the css-file.
+  import App from './App.vue'
+  import 'assets/screen.css' // Import the css-file.
 
-  const app = createApp(App);
+  const app: AppInterface = createApp(App)
 
-  app.mount('#app');
+  app.mount('#app')
   ```
 
 # Backend
@@ -171,23 +193,26 @@ I'm sorry to tell you, but we'll have to do a little bit more custom setup for a
 We start from scratch building up the project with smaller parts, to make everything into a powerfull app. You could automate the setup process with a tool like [yeoman](https://yeoman.github.io/generator/).
 
 - [ ] Create a folder where you want to setup the `Express` project. Use Git to version control it.
-- [ ] Create a `package.json` file with `npm init`. Fill in the necessary details. You could also skip the Wizard (`npm init -y`), and create the file yourself. 
+- [ ] Create a `package.json` file with `npm init`. Fill in the necessary details. You could also skip the Wizard (`npm init -y`), and create the file yourself.
 
 Now we can start by adding some NPM-packages to our project. These will run our app and make sure we can develop in a smooth way.
+
 - [ ] As we use **typescript** in our project, we have to install it with `npm i -D typescript`. Also install `npm i -D eslint`.  
-    Note the `-D` flag. This will make sure the package is listed inside the `devDependencies` section of our `package.json` file. Any package in there will not be used inside the build process. We only need it during development.  
-    If you used to work with `tslint`, you should change to `eslint` as the former is now deprecated and no longer supported.
+       Note the `-D` flag. This will make sure the package is listed inside the `devDependencies` section of our `package.json` file. Any package in there will not be used inside the build process. We only need it during development.  
+       If you used to work with `tslint`, you should change to `eslint` as the former is now deprecated and no longer supported.
 - [ ] Install the Typescript config: `npx tsc --init`. We change the `"outDir": "dist"` to make sure we are using the `dist` directory as the output.
 - [ ] To ensure a smooth development server, intall `npm i -D ts-node`.
 - [ ] The backend uses Express: `npm i -S express`.
 - [ ] For Typescript, we will install custom Express interfaces: `npm i -D @types/express`.
 - [ ] Now that we have everything installed, we can configure our `package.json` with some scripts:
+
   ```json
   "start": "npx tsc && node dist/app.js",
   "dev": "npx nodemon --watch 'server/**/*' --exec 'ts-node' server/app.ts",
   ```
 
   Note that these scripts require the backend file `app.ts` resides in the `server` directory. (This is a best-practice).
+
 - [ ] Create a folder `server` with the `app.ts` file.
 - [ ] On some machines, it might occur that the previous config doesn't work smoothly. Try to change it to `"dev": "npx nodemon --watch server/**/* --exec ts-node server/app.ts",`. Now try and edit the `app.ts` file, and see if it automatically reloads your app without crashing.
 - [ ] If you couldn't get it working, try and add a `nodemon.json` file containing this content.
@@ -198,31 +223,63 @@ Now we can start by adding some NPM-packages to our project. These will run our 
     "exec": "ts-node ./server/app.ts"
   }
   ```
-- [ ] Now, do make sure you update the line in `package.json` to:  `"dev": "nodemon",`
-  
+- [ ] Now, do make sure you update the line in `package.json` to: `"dev": "nodemon",`
 - [ ] Add a `.nvmrc`-file containing the Node version. Trick: `node -v >> .nvmrc` will writ the Node version to that file. It works cross-platform!
 - [ ] `.prettierrc` or `.editorconfig` is available. This makes sure we have a consistent codebase for different developers. Choose something that you prefer yourself. You can find an example of a file in `code/.prettierrc` for something your teachers will use.
+- [ ] You can also opt to use [es-lint](https://eslint.org/). This can work pretty good in combination with prettier and really enforce a way of writing code:
+
+  - [ ] `npm install -D eslint eslint-plugin-vue` installs es-lint.
+  - [ ] `npm install -D eslint-config-prettier` avoids a clash of titans with the prettier config.
+  - [ ] Create a config file `.eslintrc.js`:
+
+  ```javascript
+  module.exports = {
+    env: {
+      node: true,
+    },
+    extends: [
+      'eslint:recommended',
+      'plugin:vue/vue3-recommended',
+      '**prettier**',
+    ],
+    rules: {
+      // override/add rules settings here, such as:
+      // 'vue/no-unused-vars': 'error'
+    },
+  }
+  ```
+
+  - [ ] Add the linting scripts to `package.json`:
+
+  ```
+  "scripts":{
+    //...
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write"
+  }
+  ```
+
 - [ ] Now start coding. A basic Express NodeJS app looks like this:
 
   ```typescript
   // app.ts
-  import express, { Request, Response } from 'express';
+  import express, { Request, Response } from 'express'
 
   // APP SETUP
   const app = express(),
-    port = process.env.PORT || 3000;
+    port = process.env.PORT || 3000
 
   // MIDDLEWARE
-  app.use(express.json()); // for parsing application/json
+  app.use(express.json()) // for parsing application/json
 
   // ROUTES
   app.get('/', (request: Request, response: Response) => {
-    response.send(`Welcome, just know: you matter!`);
-  });
+    response.send(`Welcome, just know: you matter!`)
+  })
 
   // APP START
-  app.listen(port);
-  console.info(`\nServer 👾 \nListening on http://localhost:${port}/`);
+  app.listen(port)
+  console.info(`\nServer 👾 \nListening on http://localhost:${port}/`)
   ```
 
 ## GraphQL setup
@@ -275,7 +332,7 @@ To work with graphQL, we'll need a couple of packages:
   - [ ] Entities: The core of our data. The strength of our setup is the fact that we annotate database columns & GraphQL properties in this one entity:
 
     ```typescript
-    import { ObjectType, Field, ID, Float, InputType } from 'type-graphql';
+    import { ObjectType, Field, ID, Float, InputType } from 'type-graphql'
 
     import {
       Entity,
@@ -285,9 +342,9 @@ To work with graphQL, we'll need a couple of packages:
       CreateDateColumn,
       UpdateDateColumn,
       DeleteDateColumn,
-    } from 'typeorm';
+    } from 'typeorm'
 
-    import { ObjectId } from 'mongoose';
+    import { ObjectId } from 'mongoose'
 
     // ObjectType decorator, to tell that our class represent a Graphql object type
     @ObjectType()
@@ -300,38 +357,38 @@ To work with graphQL, we'll need a couple of packages:
       // extend the BaseEntity to use methods like find, findOne...
       @Field(() => ID, { nullable: true }) // Field decorator, represent a Graphql field of our graphql object type
       @ObjectIdColumn() // Special decorator, to tell that this column represent an unique generated ID (in mongo)
-      id: ObjectId;
+      id: ObjectId
       @Field()
       @Column()
-      title: string;
+      title: string
       @Field()
       @Column()
-      message: string;
+      message: string
       @Field({ nullable: true })
       @Column({ nullable: true })
-      someOtherEntityId?: string; // Optional
+      someOtherEntityId?: string // Optional
       @Field(() => Float, { nullable: true })
       @Column({ nullable: true })
-      someRandomNumber?: number; // Optional
+      someRandomNumber?: number // Optional
       @Field({ nullable: true })
       @CreateDateColumn({ type: 'timestamp', nullable: true })
-      createdAt?: Date;
+      createdAt?: Date
       @Field({ nullable: true })
       @UpdateDateColumn({ type: 'timestamp', nullable: true })
-      updatedAt?: Date;
+      updatedAt?: Date
       @Field({ nullable: true })
       @DeleteDateColumn({ type: 'timestamp', nullable: true })
-      deletedAt?: Date;
+      deletedAt?: Date
     }
     ```
 
   - [ ] Resolvers: The controller of the data. Here we write logic to get stuff, to delete it, etc.
 
     ```typescript
-    import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
-    import { getMongoManager, MongoEntityManager } from 'typeorm';
+    import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql'
+    import { getMongoManager, MongoEntityManager } from 'typeorm'
 
-    import { TestEntity } from '../entities/TestEntity';
+    import { TestEntity } from '../entities/TestEntity'
 
     /**
      *
@@ -341,7 +398,7 @@ To work with graphQL, we'll need a couple of packages:
      */
     @Resolver()
     export class TestEntityResolver {
-      manager: MongoEntityManager = getMongoManager('mongodb');
+      manager: MongoEntityManager = getMongoManager('mongodb')
 
       @Authorized('SOME_ROLE') // Optional role checking -> needs some customisation further on ;-)
       @Query(() => [TestEntity], { nullable: true })
@@ -349,32 +406,32 @@ To work with graphQL, we'll need a couple of packages:
         // Because we create the manager inside the resolver, we must prefix it with "this." to use it.
         const testEntities = await this.manager
           .find<TestEntity>(TestEntity)
-          .then((d) => d);
+          .then((d) => d)
 
-        return testEntities;
+        return testEntities
       }
 
       @Query(() => TestEntity, { nullable: true })
       async getTestEntityById(
         @Arg('id') id: string,
       ): Promise<TestEntity | undefined | null> {
-        return await this.manager.findOne<TestEntity>(TestEntity, id);
+        return await this.manager.findOne<TestEntity>(TestEntity, id)
       }
 
       @Mutation(() => TestEntity)
       createTestEntity(@Arg('data') newTestEntityData: TestEntity): TestEntity {
-        const testEntity = this.manager.create(TestEntity, newTestEntityData);
-        this.manager.save(testEntity);
-        return testEntity;
+        const testEntity = this.manager.create(TestEntity, newTestEntityData)
+        this.manager.save(testEntity)
+        return testEntity
       }
     }
     ```
 
   - [ ] Our app depends on the connection with a Mongo database. We will create an async closure to enable async/await syntax:
     ```typescript
-    (async () => {
+    ;(async () => {
       // All our code
-    })();
+    })()
     ```
   - [ ] We start with connecting to our database, here is an example config:
 
@@ -393,12 +450,12 @@ To work with graphQL, we'll need a couple of packages:
           : `${__dirname}/entities/**/*.ts`,
       ],
       ssl: true,
-    };
+    }
     ```
 
   - [ ] Now we have to wait for the connection to resolve before we can go on:
     ```typescript
-    await createConnection(conn);
+    await createConnection(conn)
     ```
   - [ ] Now, we can start the app with all the resolvers. Note that this is also an async action.
 
@@ -407,7 +464,7 @@ To work with graphQL, we'll need a couple of packages:
      *
      * @description create the graphql schema with the imported resolvers
      */
-    let schema: GraphQLSchema = {} as GraphQLSchema;
+    let schema: GraphQLSchema = {} as GraphQLSchema
     const createSchema = async () => {
       await buildSchema({
         resolvers: [
@@ -415,8 +472,8 @@ To work with graphQL, we'll need a couple of packages:
           // All the other resolvers
         ],
       }).then((_) => {
-        schema = _;
-      });
+        schema = _
+      })
 
       // GraphQL init middleware
       app.use(
@@ -426,16 +483,16 @@ To work with graphQL, we'll need a couple of packages:
           context: { request, response },
           graphiql: true,
         })),
-      );
+      )
 
       // APP START -> also covered in basic Express part
-      app.listen(port);
+      app.listen(port)
       console.info(
         `\nWelcome 👋\nGraphQL server @ http://localhost:${port}/v1\n`,
-      );
-    };
+      )
+    }
 
-    createSchema();
+    createSchema()
     ```
 
 ### GraphiQL
@@ -457,6 +514,7 @@ Using Visual Studio Code, you can easily configure Docker to your project.
 - Follow the instructions for `Node.JS`. Usually, you can keep everything on default.
 - Also choose to `Include optional Docker Compose files?`. This will give us an easy way to run our Docker container.
 - If everything goes well, you should have these 4 new files. You should still remember what these files do, from lessons of Backend development.
+
   - `.dockerignore`
   - `docker-compose.debug.yml`
   - `docker-compose.yml`
