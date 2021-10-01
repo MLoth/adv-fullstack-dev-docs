@@ -257,7 +257,7 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
   import { createApp, App as AppInterface } from 'vue'
 
   import App from './App.vue'
-  import 'assets/screen.css' // Import the css-file.
+  import './assets/screen.css' // Import the css-file.
 
   const app: AppInterface = createApp(App)
 
