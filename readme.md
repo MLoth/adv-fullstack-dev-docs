@@ -264,6 +264,107 @@ The Vue-ecosystem consist mostly out of plugins. We have written the most import
   app.mount('#app')
   ```
 
+- **PWA** support
+
+  1. Install the packages for the pwa plugin vite and for the workbox plugin.
+
+  ```bash
+  npm i vite-plugin-pwa workbox-precaching -D
+  ```
+
+  2. Update the Vite-plugin file `vite.config.ts`:
+
+  ```typescript
+  import { defineConfig } from 'vite'
+  import vue from '@vitejs/plugin-vue'
+  import { VitePWA } from 'vite-plugin-pwa'
+
+  export default defineConfig({
+    plugins: [vue(), VitePWA()],
+  })
+  ```
+
+  A complete config would look something like:
+
+  ```typescript
+  import { defineConfig } from 'vite'
+  import vue from '@vitejs/plugin-vue'
+  import { VitePWA } from 'vite-plugin-pwa'
+
+  export default defineConfig({
+    plugins: [
+      vue(),
+      VitePWA({
+        mode: 'development',
+        base: '/',
+        srcDir: 'src',
+        filename: 'sw.ts',
+        includeAssets: ['/favicon.png'],
+        strategies: 'injectManifest',
+        manifest: {
+          name: 'Test Project',
+          short_name: 'Test',
+          theme_color: '#ffffff',
+          start_url: '/',
+          display: 'standalone',
+          background_color: '#ffffff',
+          icons: [
+            {
+              src: 'icon-192.png',
+              sizes: '192x192',
+              type: 'image/png',
+            },
+            {
+              src: '/icon-512.png',
+              sizes: '512x512',
+              type: 'image/png',
+            },
+            {
+              src: 'icon-512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable',
+            },
+          ],
+        },
+      }),
+    ],
+  })
+  ```
+
+  3. Some typescript errors might appear, we can fix these by allowing workers:
+
+  ```json
+  {
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "strict": true,
+      "jsx": "preserve",
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "baseUrl": ".",
+      "paths": {
+        "/@/*": ["src/*"]
+      },
+      "lib": ["ESNext", "DOM", "WebWorker"]
+    },
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+    "exclude": [
+      "dist",
+      "node_modules",
+      "test",
+      "test.ts",
+      "**/*.spec.ts",
+      "**/*.worker.ts"
+    ]
+  }
+  ```
+
+  See also https://rubenr.dev/en/pwa-vite/ for service-worker implementation.
+
 # Backend
 
 ## TLDR; Checklist bij een nieuw project
