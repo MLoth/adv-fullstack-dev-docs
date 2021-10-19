@@ -618,26 +618,22 @@ To work with graphQL, we'll need a couple of packages:
   - [ ] We start with connecting to our database, here is an example config:
 
     ```typescript
-    const conn: MongoConnectionOptions = {
-      name: 'mongodb',
+    const connection: MongoConnectionOptions = {
+      name: 'mongodb', // Useful for reference later on
       type: 'mongodb',
       url: TODO_1, // Url to the database eg. mongodb://myDBReader:D1fficultP%40ssw0rd@mongodb0.example.com:27017/?authSource=admin
       useNewUrlParser: true,
       synchronize: true,
       logging: true,
       useUnifiedTopology: true,
-      entities: [
-        TODO_2 // Check if we are using the production env. or the dev-server
-          ? `${__dirname}/entities/**/*.js`
-          : `${__dirname}/entities/**/*.ts`,
-      ],
-      ssl: true,
+      entities: [`${__dirname}/entities/*{.ts,.js}`],
+      ssl: false, // false for local dev.
     }
     ```
 
   - [ ] Now we have to wait for the connection to resolve before we can go on:
     ```typescript
-    await createConnection(conn)
+    await createConnection(connection)
     ```
   - [ ] Now, we can start the app with all the resolvers. Note that this is also an async action.
 
